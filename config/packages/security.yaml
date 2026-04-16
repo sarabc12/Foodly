@@ -20,10 +20,7 @@ security:
             lazy: true
             provider: app_user_provider
             
-            # Qui colleghi la classe generata dal comando precedente
             custom_authenticator: App\Security\AppAuthenticator
-            
-            # Fondamentale: dice a Symfony di usare questa classe per gestire i reindirizzamenti
             entry_point: App\Security\AppAuthenticator
             
             logout:

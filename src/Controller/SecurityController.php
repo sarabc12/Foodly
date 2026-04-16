@@ -16,9 +16,7 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('target_path');
         }
 
-        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('@EasyAdmin/page/login.html.twig', [
@@ -26,7 +24,6 @@ class SecurityController extends AbstractController
             'error' => $error,
             'csrf_token_intention' => 'authenticate',
             'target_path' => $this->generateUrl('admin'),
-            // ECCO LA RIGA DA AGGIUNGERE:
             'remember_me_enabled' => true,
             'remember_me_label' => 'Resta collegato',
         ]);
