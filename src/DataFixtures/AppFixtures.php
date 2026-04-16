@@ -15,15 +15,13 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // Default locale is English (US)
         $faker = Factory::create(); 
 
-        // 1. CREATE 15 USERS WITH DIFFERENT ROLES
+        //CREATE 15 USERS
         for ($u = 1; $u <= 15; $u++) {
             $user = new User();
             $user->setName($faker->firstName);
             $user->setSurname($faker->lastName);
-            // Example: john.doe@foodly.com
             $user->setEmail(strtolower($user->getName() . "." . $user->getSurname() . "@" . $faker->freeEmailDomain));
             $user->setPassword("password$u"); 
 
@@ -63,14 +61,14 @@ class AppFixtures extends Fixture
             'Pulled Pork Sandwich', 'Cauliflower Steak', 'Shrimp Scampi', 'Paella Valenciana'
         ];
 
-        // 2. CREATE 10 RESTAURANTS
+        //CREATE 10 RESTAURANTS
         for ($r = 1; $r <= 20; $r++) {
             $restaurant = new Restaurant();
             $restaurant->setName($faker->company . " " . $faker->companySuffix);
             $restaurant->setCategory($faker->randomElement($categories));
             $manager->persist($restaurant);
 
-            // 3. CREATE 4 MENUS PER RESTAURANT
+            //CREATE 4 MENUS PER RESTAURANT
             for ($m = 1; $m <= 4; $m++) {
                 $menu = new Menu();
                 $menu->setName($faker->randomElement($menuNames));
@@ -78,7 +76,7 @@ class AppFixtures extends Fixture
                 $menu->setRestaurant($restaurant);
                 $manager->persist($menu);
 
-                // 4. CREATE 20 PLATES PER MENU
+            //CREATE 20 PLATES PER MENU
                 for ($p = 1; $p <= 30; $p++) {
                     $plate = new Plate();
                     $plate->setName($faker->randomElement($foodNames) . " " . $faker->bs); // Adds a fancy marketing touch
