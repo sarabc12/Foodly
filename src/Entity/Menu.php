@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MenuRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,6 +25,17 @@ class Menu
     #[ORM\ManyToOne(inversedBy: 'menus')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Restaurant $restaurant = null;
+
+    /**
+     * @var Collection<int, Plate>
+     */
+    #[ORM\ManyToMany(targetEntity: Plate::class, mappedBy: 'menus')]
+    private Collection $plates;
+
+    public function __construct()
+    {
+        $this->plates = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -61,6 +74,33 @@ class Menu
     public function setRestaurant(?Restaurant $restaurant): static
     {
         $this->restaurant = $restaurant;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Plate>
+     */
+    public function getPlates(): Collection
+    {
+        return $this->plates;
+    }
+
+    public function addPlate(Plate $plate): static
+    {
+        if (!$this->plates->contains($plate)) {
+            $this->plates->add($plate);
+            $plate->addMenu($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlate(Plate $plate): static
+    {
+        if ($this->plates->removeElement($plate)) {
+            $plate->removeMenu($this);
+        }
 
         return $this;
     }
