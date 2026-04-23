@@ -34,9 +34,16 @@ class Plate
     #[ORM\Column]
     private ?bool $is_vegan = null;
 
+    /**
+     * @var Collection<int, Allergen>
+     */
+    #[ORM\ManyToMany(targetEntity: Allergen::class, inversedBy: 'plates')]
+    private Collection $allergens;
+
     public function __construct()
     {
         $this->menus = new ArrayCollection();
+        $this->allergens = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,6 +119,30 @@ class Plate
     public function setIsVegan(bool $is_vegan): static
     {
         $this->is_vegan = $is_vegan;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Allergen>
+     */
+    public function getAllergens(): Collection
+    {
+        return $this->allergens;
+    }
+
+    public function addAllergen(Allergen $allergen): static
+    {
+        if (!$this->allergens->contains($allergen)) {
+            $this->allergens->add($allergen);
+        }
+
+        return $this;
+    }
+
+    public function removeAllergen(Allergen $allergen): static
+    {
+        $this->allergens->removeElement($allergen);
 
         return $this;
     }
