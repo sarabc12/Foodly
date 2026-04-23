@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\Restaurant;
 use App\Entity\Menu;
 use App\Entity\Plate;
+use App\Entity\Order; // Aggiunto
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -16,6 +17,8 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create(); 
+
+        $users = [];
 
         //CREATE 15 USERS
         for ($u = 1; $u <= 15; $u++) {
@@ -34,8 +37,19 @@ class AppFixtures extends Fixture
             }
 
             $manager->persist($user);
+            $users[] = $user;
         }
 
+        //CREATE 50 ORDERS
+        $statuses = ['pending', 'completed', 'shipped', 'cancelled'];
+        for ($o = 1; $o <= 50; $o++) {
+            $order = new Order();
+            $order->setCode($faker->bothify('ORD-####-????'));
+            $order->setDate(\DateTimeImmutable::createFromMutable($faker->dateTimeThisYear()));
+            $order->setStatus($faker->randomElement($statuses));
+            $order->setUser($faker->randomElement($users)); // Relazione con User
+            $manager->persist($order);
+        }
 
         $categories = [
             'Bakery & Pastry', 'Sushi Bar', 'Steakhouse', 'Gourmet Burger', 'Vegan Bistro', 
@@ -61,11 +75,18 @@ class AppFixtures extends Fixture
             'Pulled Pork Sandwich', 'Cauliflower Steak', 'Shrimp Scampi', 'Paella Valenciana'
         ];
 
-        //CREATE 10 RESTAURANTS
+        //CREATE 20 RESTAURANTS
         for ($r = 1; $r <= 20; $r++) {
             $restaurant = new Restaurant();
             $restaurant->setName($faker->company . " " . $faker->companySuffix);
             $restaurant->setCategory($faker->randomElement($categories));
+            
+
+            $randomUsers = $faker->randomElements($users, $faker->numberBetween(1, 2));
+            foreach ($randomUsers as $randomUser) {
+                $restaurant->addUser($randomUser);
+            }
+
             $manager->persist($restaurant);
 
             //CREATE 4 MENUS PER RESTAURANT
@@ -76,13 +97,14 @@ class AppFixtures extends Fixture
                 $menu->setRestaurant($restaurant);
                 $manager->persist($menu);
 
-            //CREATE 20 PLATES PER MENU
+                //CREATE 30 PLATES PER MENU
                 for ($p = 1; $p <= 30; $p++) {
                     $plate = new Plate();
-                    $plate->setName($faker->randomElement($foodNames) . " " . $faker->bs); // Adds a fancy marketing touch
-                    $plate->setPrice($faker->randomFloat(2, 8, 60)); // Prices between 8.00 and 60.00
+                    $plate->setName($faker->randomElement($foodNames) . " " . $faker->bs);
+                    $plate->setPrice($faker->randomFloat(2, 8, 60));
                     
                     $plate->addMenu($menu); 
+                    
                     $manager->persist($plate);
                 }
             }
