@@ -7,7 +7,7 @@ use App\Entity\User;
 use App\Entity\Restaurant;
 use App\Entity\Menu;
 use App\Entity\Plate;
-use App\Entity\Order; // Aggiunto
+use App\Entity\Order;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -20,7 +20,6 @@ class AppFixtures extends Fixture
 
         $users = [];
 
-        //CREATE 15 USERS
         for ($u = 1; $u <= 15; $u++) {
             $user = new User();
             $user->setName($faker->firstName);
@@ -65,13 +64,16 @@ class AppFixtures extends Fixture
             'Dessert Extravaganza', 'Gluten-Free Options', 'Signature Dishes'
         ];
 
+
+        $menuTypes = ['pranzo', 'cena', 'degustazione', 'colazione', 'aperitivo'];
+
         $foodNames = [
             'Grilled Salmon', 'Beef Wellington', 'Avocado Toast', 'Truffle Pasta', 'Cheesecake', 
             'Chicken Caesar', 'Ribeye Steak', 'Margherita Pizza', 'Spicy Tuna Roll', 'Eggs Benedict', 
             'Pork Belly Bao', 'Lamb Chops', 'Lobster Roll', 'Quinoa Salad', 'Duck Confit', 
             'Mushroom Risotto', 'Fish and Chips', 'Beef Tacos', 'Chicken Tikka Masala', 
             'Pad Thai', 'Falafel Wrap', 'Burrata with Pesto', 'BBQ Pork Ribs', 'Clam Chowder', 
-            'Tiramisu', 'Profiteroles', 'Beef Tartare', 'Gazpacho', 'Dim Sum Selection', 
+            'Tiramisu', 'Phrofiteroles', 'Beef Tartare', 'Gazpacho', 'Dim Sum Selection', 
             'Pulled Pork Sandwich', 'Cauliflower Steak', 'Shrimp Scampi', 'Paella Valenciana'
         ];
 
@@ -94,6 +96,9 @@ class AppFixtures extends Fixture
                 $menu = new Menu();
                 $menu->setName($faker->randomElement($menuNames));
                 $menu->setDescription($faker->catchPhrase . "-" . $faker->bs);
+
+                $menu->setType($faker->randomElement($menuTypes));
+
                 $menu->setRestaurant($restaurant);
                 $manager->persist($menu);
 
@@ -103,6 +108,8 @@ class AppFixtures extends Fixture
                     $plate->setName($faker->randomElement($foodNames) . " " . $faker->bs);
                     $plate->setPrice($faker->randomFloat(2, 8, 60));
                     
+                    $plate->setDescription($faker->realText(100));
+                    $plate->setIsVegan($faker->boolean(20));
                     $plate->addMenu($menu); 
                     
                     $manager->persist($plate);
