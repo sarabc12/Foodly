@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Plate;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,28 +18,13 @@ class PlateRepository extends ServiceEntityRepository
         parent::__construct($registry, Plate::class);
     }
 
-    //    /**
-    //     * @return Plate[] Returns an array of Plate objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function filterByUser(QueryBuilder $queryBuilder, User  $user): QueryBuilder {
+        return $queryBuilder
+            ->join('entity.menus', 'm')
+            ->join('m.restaurant', 'r')
+            ->join('r.users', 'u')
+            ->andWhere('u.id = :userId')
+            ->setParameter('userId', $user->getId());
+    }
 
-    //    public function findOneBySomeField($value): ?Plate
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

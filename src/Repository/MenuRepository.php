@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Menu;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Menu>
@@ -15,29 +17,12 @@ class MenuRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Menu::class);
     }
-
-    //    /**
-    //     * @return Menu[] Returns an array of Menu objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('m.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Menu
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        /* definire la query */
+    public function filterByUser(QueryBuilder $queryBuilder, User $user): QueryBuilder {
+        return $queryBuilder
+            ->join('entity.restaurant', 'r')
+            ->join('r.users', 'u')
+            ->andWhere('u.id = :userId')
+            ->setParameter('userId', $user->getId());
+    }
 }
