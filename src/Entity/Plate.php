@@ -28,6 +28,12 @@ class Plate
     #[ORM\ManyToMany(targetEntity: Menu::class, inversedBy: 'plates')]
     private Collection $menus;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column]
+    private ?bool $is_vegan = null;
+
     public function __construct()
     {
         $this->menus = new ArrayCollection();
@@ -82,6 +88,30 @@ class Plate
     public function removeMenu(Menu $menu): static
     {
         $this->menus->removeElement($menu);
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function isVegan(): ?bool
+    {
+        return $this->is_vegan;
+    }
+
+    public function setIsVegan(bool $is_vegan): static
+    {
+        $this->is_vegan = $is_vegan;
 
         return $this;
     }
