@@ -5,9 +5,22 @@ namespace App\Service;
 use App\Entity\User;
 use App\Entity\Menu;
 use App\Entity\Restaurant;
+use App\Repository\RestaurantRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class AdminSecurityService {
+
+    private RestaurantRepository $restaurantRepository;
+
+    public function __construct(RestaurantRepository $restaurantRepository)
+    {
+        $this->restaurantRepository = $restaurantRepository;
+    }
+
+    public function getRestaurantForUser(User $user): QueryBuilder {
+        return $this->restaurantRepository->createByUserQueryBuilder($user);
+    }
 
     /* checking that the user is a owner */
     public function checkRestaurantOwnership(Restaurant $restaurant, User $user): void 

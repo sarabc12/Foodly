@@ -119,4 +119,5 @@ class Menu
 
         return $this;
     }
+
 }

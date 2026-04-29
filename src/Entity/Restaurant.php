@@ -121,4 +121,9 @@ class Restaurant
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->name ?? 'Unnamed Restaurant';
+    }
 }
