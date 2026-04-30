@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Entity\Menu;
+use App\Entity\Order;
 use App\Entity\Restaurant;
 use App\Repository\RestaurantRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -42,5 +43,9 @@ class AdminSecurityService {
         if(!$ownsRestaurant){
             throw new AccessDeniedException("You do not have permission to access this Menu");
         }
+    }
+
+    public function canUserManageOrder(User $currentUser, Order $order) : bool {
+        return $order->getUser() !== null;
     }
 }

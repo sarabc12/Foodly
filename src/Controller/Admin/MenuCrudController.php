@@ -51,7 +51,7 @@ class MenuCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        yield IdField::new('id')->hideOnForm();
+        yield IdField::new('id')->hideOnForm()->hideOnIndex();
         yield TextField::new('name', 'Menu Title');
         yield TextField::new('type', 'Menu Type');
         yield TextEditorField::new('description', 'Menu Description');

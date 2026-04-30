@@ -11,9 +11,11 @@ use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Override;
 
 class PlateCrudController extends AbstractCrudController
 {
@@ -39,5 +41,14 @@ class PlateCrudController extends AbstractCrudController
             $this->plateRepository->filterByUser($queryBuilder, $user);
         }
         return $queryBuilder;
+    }
+    
+    public function configureFields(string $pageName): iterable
+    {
+        yield IdField::new('id')->hideOnIndex();
+        yield TextField::new('name', 'Plate');
+        yield TextField::new('price', 'Price');
+        yield TextField::new('description', 'Description');
+        yield BooleanField::new('is_vegan', 'Vegan');
     }
 }
