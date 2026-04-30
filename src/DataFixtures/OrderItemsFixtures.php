@@ -10,14 +10,12 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-// Usiamo DependentFixtureInterface per essere sicuri che Order e Plate esistano già
-class OrderItemsFixtures extends Fixture 
+class OrderItemsFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
         
-        // Recuperiamo gli ordini e i piatti esistenti nel DB
         $orders = $manager->getRepository(Order::class)->findAll();
         $plates = $manager->getRepository(Plate::class)->findAll();
 
@@ -26,21 +24,29 @@ class OrderItemsFixtures extends Fixture
         }
 
         foreach ($orders as $order) {
-            // Per ogni ordine, creiamo da 1 a 4 righe d'ordine (OrderItem)
-            $numberOfItems = rand(1, 4);
-            $randomPlates = $faker->randomElements($plates, $numberOfItems);
+            $numberOfItems = rand(1, 3);
 
-            foreach ($randomPlates as $plate) {
+            for ($i = 0; $i < $numberOfItems; $i++) {
                 $orderItem = new OrderItem();
                 $orderItem->setRelatedOrder($order);
-                $orderItem->setPlate($plate);
-                // Se hai aggiunto la quantità nell'entity, setta anche quella:
-                // $orderItem->setQuantity(rand(1, 3)); 
+
+                $randomPlates = $faker->randomElements($plates, rand(1, 2));
+                
+                foreach ($randomPlates as $plate) {
+                    $orderItem->addPlate($plate);
+                }
 
                 $manager->persist($orderItem);
             }
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            AppFixtures::class, 
+        ];
     }
 }

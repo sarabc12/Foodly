@@ -7,7 +7,7 @@
             <tr>
                 <td>
                     {% for plate in item.plate %}
-                        <span>{{ item.plate.name }}</span>
+                        <span>{{ plate.name }}</span>
                         {{ not loop.last ? ' + ' : '' }}
                     {% endfor %}
                 </td>
