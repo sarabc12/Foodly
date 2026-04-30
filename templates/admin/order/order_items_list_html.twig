@@ -1,0 +1,21 @@
+{# Questo codice verrà inserito dentro la riga "Lista Piatti" della pagina Show standard #}
+<table class="table table-sm mb-0">
+    <thead>
+    </thead>
+    <tbody>
+        {% for item in field.value %}
+            <tr>
+                <td>
+                    {% for plate in item.plate %}
+                        <span>{{ plate.name }}</span>
+                        {{ not loop.last ? ' + ' : '' }}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2" class="text-center text-muted">Nessun piatto in questo ordine</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
