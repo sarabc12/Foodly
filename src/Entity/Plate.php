@@ -40,6 +40,17 @@ class Plate
     #[ORM\ManyToMany(targetEntity: Allergen::class, inversedBy: 'plates')]
     private Collection $allergens;
 
+    /**
+     * @var Collection<int, OrderItem>
+     */
+    #[ORM\OneToMany(mappedBy: 'plate_id', targetEntity: OrderItem::class, orphanRemoval: true)]
+    private Collection $orderItems;
+
+    public function __construct()
+    {
+        $this->orderItems = new ArrayCollection();
+    }
+
    
     public function getId(): ?int
     {
@@ -138,6 +149,36 @@ class Plate
     public function removeAllergen(Allergen $allergen): static
     {
         $this->allergens->removeElement($allergen);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderItem>
+     */
+    public function getOrderItems(): Collection
+    {
+        return $this->orderItems;
+    }
+
+    public function addOrderItem(OrderItem $orderItem): static
+    {
+        if (!$this->orderItems->contains($orderItem)) {
+            $this->orderItems->add($orderItem);
+            $orderItem->setPlateId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderItem(OrderItem $orderItem): static
+    {
+        if ($this->orderItems->removeElement($orderItem)) {
+            // set the owning side to null (unless already changed)
+            if ($orderItem->getPlateId() === $this) {
+                $orderItem->setPlateId(null);
+            }
+        }
 
         return $this;
     }
