@@ -1,6 +1,5 @@
 <?php
 
-// src/DataFixtures/OrderItemFixtures.php
 namespace App\DataFixtures;
 
 use App\Entity\OrderItem;
@@ -24,7 +23,6 @@ class OrderItemFixtures extends Fixture
                     $numberOfPlates = $faker->numberBetween(2, 5);
                     for ($i = 0; $i < $numberOfPlates; $i++) {
                         $orderItem = new OrderItem();
-                        // Usa i nuovi nomi dei metodi senza "Id"
                         $orderItem->setOrder($order);
                         $orderItem->setPlate($faker->randomElement($plates));
 
@@ -33,9 +31,7 @@ class OrderItemFixtures extends Fixture
         }
         
 
-        echo "Eseguo il Flush finale...\n";
         $manager->flush();
-        $manager->clear(); // Libera la memoria
-        echo "Fatto!\n";
+        $manager->clear(); 
     }
 }

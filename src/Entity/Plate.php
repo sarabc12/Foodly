@@ -176,7 +176,6 @@ class Plate
     public function removeOrderItem(OrderItem $orderItem): static
     {
         if ($this->orderItems->removeElement($orderItem)) {
-            // set the owning side to null (unless already changed)
             if ($orderItem->getPlate() === $this) {
                 $orderItem->setPlate(null);
             }
