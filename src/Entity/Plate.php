@@ -48,6 +48,8 @@ class Plate
 
     public function __construct()
     {
+        $this->menus = new ArrayCollection();
+        $this->allergens = new ArrayCollection();
         $this->orderItems = new ArrayCollection();
     }
 
