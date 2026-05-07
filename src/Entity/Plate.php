@@ -167,7 +167,7 @@ class Plate
     {
         if (!$this->orderItems->contains($orderItem)) {
             $this->orderItems->add($orderItem);
-            $orderItem->setPlateId($this);
+            $orderItem->setPlate($this);
         }
 
         return $this;
@@ -177,8 +177,8 @@ class Plate
     {
         if ($this->orderItems->removeElement($orderItem)) {
             // set the owning side to null (unless already changed)
-            if ($orderItem->getPlateId() === $this) {
-                $orderItem->setPlateId(null);
+            if ($orderItem->getPlate() === $this) {
+                $orderItem->setPlate(null);
             }
         }
 

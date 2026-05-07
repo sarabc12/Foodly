@@ -15,37 +15,37 @@ class OrderItem
 
     #[ORM\ManyToOne(inversedBy: 'orderItems')]
     #[ORM\JoinColumn(nullable: false, name: 'order_id')]
-    private ?Order $order_id = null;
+    private ?Order $order = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderItems')]
     #[ORM\JoinColumn(nullable: false, name: 'plate_id')]
-    private ?Plate $plate_id = null;
+    private ?Plate $plate = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getOrderId(): ?Order
+    public function getOrder(): ?Order
     {
-        return $this->order_id;
+        return $this->order;
     }
 
-    public function setOrderId(?Order $order_id): static
+    public function setOrder(?Order $order): static
     {
-        $this->order_id = $order_id;
+        $this->order = $order;
 
         return $this;
     }
 
-    public function getPlateId(): ?Plate
+    public function getPlate(): ?Plate
     {
-        return $this->plate_id;
+        return $this->plate;
     }
 
-    public function setPlateId(?Plate $plate_id): static
+    public function setPlate(?Plate $plate): static
     {
-        $this->plate_id = $plate_id;
+        $this->plate = $plate;
 
         return $this;
     }

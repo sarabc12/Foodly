@@ -18,23 +18,24 @@ class OrderItemFixtures extends Fixture
         $orders = $manager->getRepository(Order::class)->findAll();
         $plates = $manager->getRepository(Plate::class)->findAll();
 
-        if (empty($orders) || empty($plates)) {
-            echo "Attenzione: Assicurati di avere già ordini e piatti nel database!\n";
-            return;
-        }
+        echo "Inizio caricamento OrderItems...\n";
 
         foreach ($orders as $order) {
-            $numberOfPlates = $faker->numberBetween(2, 6);
-            
-            for ($i = 0; $i < $numberOfPlates; $i++) {
-                $orderItem = new OrderItem();
-                $orderItem->setOrderId($order);
-                $orderItem->setPlateId($faker->randomElement($plates));
+                    $numberOfPlates = $faker->numberBetween(2, 5);
+                    for ($i = 0; $i < $numberOfPlates; $i++) {
+                        $orderItem = new OrderItem();
+                        // Usa i nuovi nomi dei metodi senza "Id"
+                        $orderItem->setOrder($order);
+                        $orderItem->setPlate($faker->randomElement($plates));
 
-                $manager->persist($orderItem);
-            }
+                        $manager->persist($orderItem);
+                    }
         }
+        
 
+        echo "Eseguo il Flush finale...\n";
         $manager->flush();
+        $manager->clear(); // Libera la memoria
+        echo "Fatto!\n";
     }
 }
