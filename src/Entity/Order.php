@@ -29,17 +29,6 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?User $User = null;
 
-    /**
-     * @var Collection<int, OrderItem>
-     */
-    #[ORM\OneToMany(mappedBy: 'relatedOrder', targetEntity: OrderItem::class, orphanRemoval: true)]
-    private Collection $orderItems;
-
-    public function __construct()
-    {
-        $this->orderItems = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -93,33 +82,4 @@ class Order
         return $this;
     }
 
-    /**
-     * @return Collection<int, OrderItem>
-     */
-    public function getOrderItems(): Collection
-    {
-        return $this->orderItems;
-    }
-
-    public function addOrderItem(OrderItem $orderItem): static
-    {
-        if (!$this->orderItems->contains($orderItem)) {
-            $this->orderItems->add($orderItem);
-            $orderItem->setRelatedOrder($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrderItem(OrderItem $orderItem): static
-    {
-        if ($this->orderItems->removeElement($orderItem)) {
-            // set the owning side to null (unless already changed)
-            if ($orderItem->getRelatedOrder() === $this) {
-                $orderItem->setRelatedOrder(null);
-            }
-        }
-
-        return $this;
-    }
 }
