@@ -52,9 +52,6 @@ class StatsService {
                         'drawBorder' => false,
                         'color' => '#f0f0f0', 
                     ],
-                    'ticks' => [
-                        'callback' => 'function(value) { return value + "k"; }', 
-                    ]
                 ],
                 'x' => [
                     'grid' => [

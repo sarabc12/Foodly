@@ -7,6 +7,7 @@ use App\Entity\Menu;
 use App\Entity\Order;
 use App\Entity\Plate;
 use App\Service\StatsService;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -43,5 +44,11 @@ class DashboardController extends AbstractDashboardController
             ]);
         yield MenuItem::linkToCrud('Orders', 'fa-solid fa-basket-shopping', Order::class);
 
+    }
+    public function configureAssets(): Assets
+    {
+        return parent::configureAssets()
+            ->addAssetMapperEntry('app'); 
+            // Questo caricherà app.js (e quindi stimulus_bootstrap.js) in tutta la dashboard
     }
 }
