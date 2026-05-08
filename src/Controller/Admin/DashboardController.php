@@ -6,6 +6,7 @@ use App\Entity\Restaurant;
 use App\Entity\Menu;
 use App\Entity\Order;
 use App\Entity\Plate;
+use App\Service\StatsService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -14,10 +15,16 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DashboardController extends AbstractDashboardController
 {
+    public function __construct( private StatsService $statsService)
+    {}
+
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        return $this->render('admin/index.html.twig');
+        $chart = $this->statsService->getOrderRateChart();
+        return $this->render(('admin/index.html.twig'), [
+            'chart' => $chart,
+        ]);
     }
 
     public function configureDashboard(): Dashboard

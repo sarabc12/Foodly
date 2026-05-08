@@ -1,0 +1,25 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{# Usiamo questo blocco per aggiungere JavaScript senza rompere il layout #}
+{% block body_javascript %}
+    {{ parent() }}
+    {{ importmap('app') }}
+{% endblock %}
+
+{% block main %}
+    {# Usiamo classi standard di EasyAdmin per non rompere i margini #}
+    <div class="content-panel">
+        <div class="content-panel-body with-background without-footer shadow-sm" style="border-radius: 10px; padding: 20px;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 class="h4 m-0">Order Rate</h2>
+                    <small class="text-muted">Order activity this year</small>
+                </div>
+            </div>
+
+            <div style="height: 350px; width: 100%; min-width: 0;">
+                {{ render_chart(chart) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

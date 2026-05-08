@@ -23,4 +23,17 @@ class OrderRepository extends ServiceEntityRepository
             ->addSelect('u');
     }
 
+    public function countOrdersByMonthForCurrentYear(): array {
+        $currentYear = (new \DateTime())->format('Y');
+
+        return $this->createQueryBuilder('o')
+            ->select('month(o.date) as month, COUNT(o.id) as count')
+            ->where('year(o.date) = :year')
+            ->setParameter('year', $currentYear)
+            ->groupBy('month')
+            ->orderBy('month', 'ASC')
+            ->getQuery()
+            ->getResult();
+        }
+
 }
