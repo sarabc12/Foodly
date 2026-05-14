@@ -58,12 +58,16 @@ class OrderCrudController extends AbstractCrudController
                     'shipped' => 'info',
                     'completed' => 'success',
                 ]);
-        yield AssociationField::new('User','Client');
-        if(Crud::PAGE_DETAIL === $pageName){
+        yield AssociationField::new('User','Client')
+        /*if(Crud::PAGE_DETAIL === $pageName){
             yield CollectionField::new('orderItems', 'Plates')
                 ->setTemplatePath('admin/order/order_items_list_html.twig')
                 ->onlyOnDetail();
-        }
+        }*/  
+            ->formatValue(function ($value, $entity){
+                return $value ? sprintf('%s %s', $value->getName(), $value->getSurname()) : '';
+            })
+            ->setTemplatePath('@EasyAdmin/crud/field/text.html.twig');
     }
 
 }
