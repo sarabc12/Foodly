@@ -6,10 +6,12 @@ use App\Entity\Menu;
 use App\Entity\User;
 use App\Repository\MenuRepository;
 use App\Service\AdminSecurityService;
+use App\Service\MenuLayoutService;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -19,6 +21,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Override;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_OWNER')]
@@ -26,11 +29,14 @@ class MenuCrudController extends AbstractCrudController
 {
     private MenuRepository $menuRepository;
     private AdminSecurityService $securityService;
+    private MenuLayoutService $menuLayoutService;
 
-    public function __construct(MenuRepository $menuRepository, AdminSecurityService $securityService)
+    public function __construct(MenuRepository $menuRepository, AdminSecurityService $securityService, MenuLayoutService $menuLayoutService)
     {
         $this->menuRepository = $menuRepository;
         $this->securityService = $securityService;
+        $this->menuLayoutService = $menuLayoutService;
+        
     }
 
     public static function getEntityFqcn(): string
@@ -47,6 +53,12 @@ class MenuCrudController extends AbstractCrudController
            $this->menuRepository->filterByUser($queryBuilder, $user);
         }
         return $queryBuilder;
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->overrideTemplate('crud/index', 'admin/menu/cards.html.twig');
     }
 
     public function configureFields(string $pageName): iterable
@@ -71,6 +83,18 @@ class MenuCrudController extends AbstractCrudController
                 return $entity->getRestaurant()?->getName();
             });
     }
+
+    #[Override]
+    public function configureResponseParameters(KeyValueStore $responseParameters): KeyValueStore
+    {
+        $user = $this->getUser();
+        if($user instanceof User){
+            $responseParameters->set('groupedMenus', $this->menuLayoutService->getMenuGroupedByRestaurant($user));
+        }
+        return $responseParameters;
+    }
+
+
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if (!$entityInstance instanceof Menu) {
