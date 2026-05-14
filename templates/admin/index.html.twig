@@ -1,21 +1,26 @@
-{% extends '@EasyAdmin/layout.html.twig' %}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Statistics{% endblock %}
 
 {% block main %}
-    {# Usiamo le classi native di EasyAdmin per il contenuto principale #}
-    <div class="content-body">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-body p-4">
-                            <h2 class="h4 mb-4" style="color: #333; font-weight: 600;">Order Rate</h2>
-                            
-                            {# Il trucco è dare un'altezza fissa ma larghezza automatica #}
-                            <div style="height: 450px; width: 100%; position: relative;">
-                                {{ render_chart(chart) }}
-                            </div>
-                        </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="h4 mb-4">Order Rate</h2>
+                    <div style="height: 400px;">
+                        {{ render_chart(chart) }}
                     </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            {# Qui puoi aggiungere altri widget o riepiloghi #}
+            <div class="card bg-primary text-white shadow-sm border-0">
+                <div class="card-body">
+                    <h5>Restaurants</h5>
+                    <p class="display-4">12</p>
                 </div>
             </div>
         </div>

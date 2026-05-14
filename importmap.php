@@ -35,4 +35,8 @@ return [
     '@kurkle/color' => [
         'version' => '0.3.4',
     ],
+    'admin_dashboard' => [
+        'path' => './assets/admin_dashboard.js',
+        'entrypoint' => true,
+    ],
 ];

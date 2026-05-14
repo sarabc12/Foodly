@@ -48,7 +48,7 @@ class DashboardController extends AbstractDashboardController
     public function configureAssets(): Assets
     {
         return parent::configureAssets()
-            ->addAssetMapperEntry('app'); 
+            ->addAssetMapperEntry('admin_dashboard'); 
             // Questo caricherà app.js (e quindi stimulus_bootstrap.js) in tutta la dashboard
     }
 }
