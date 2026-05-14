@@ -1,5 +1,5 @@
 import { startStimulusApp } from '@symfony/stimulus-bundle';
-import ChartController from '@symfony/ux-chartjs/controller.js';
+import ChartController from '@symfony/ux-chartjs';
 
 const app = startStimulusApp();
 // register any custom, 3rd party controllers here
