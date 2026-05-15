@@ -18,13 +18,20 @@ class PlateRepository extends ServiceEntityRepository
         parent::__construct($registry, Plate::class);
     }
 
-    public function filterByUser(QueryBuilder $queryBuilder, User  $user): QueryBuilder {
-        return $queryBuilder
+    public function filterByUser(QueryBuilder $queryBuilder, User  $user, ?int $menuId = null): QueryBuilder {
+        $queryBuilder
             ->join('entity.menus', 'm')
             ->join('m.restaurant', 'r')
             ->join('r.users', 'u')
             ->andWhere('u.id = :userId')
             ->setParameter('userId', $user->getId());
+        if($menuId){
+            $queryBuilder
+                ->andWhere('m.id = :menuId')
+                ->setParameter('menuId', $menuId);
+        }
+        
+        return $queryBuilder;
     }
 
 }

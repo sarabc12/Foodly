@@ -18,8 +18,9 @@
                                 <a href="{{ ea_url()
                                     .setController('App\\Controller\\Admin\\PlateCrudController')
                                     .setAction('index')
-                                    .set('menu_id', menu.id) }}" 
-                                   class="btn btn-link p-0 text-decoration-none">
+                                    .set('menu_id', menu.id) }}
+                                    .generateUrl() }}" 
+                                   class="btn btn-primary">
                                    link to viewplate of this menu
                                 </a>
                             </div>

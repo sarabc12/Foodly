@@ -36,9 +36,10 @@ class PlateCrudController extends AbstractCrudController
     {
         $queryBuilder = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $user = $this->getUser();
+        $menuId = $this->getContext()->getRequest()->query->get('menuId');
     
         if($user instanceof User){
-            $this->plateRepository->filterByUser($queryBuilder, $user);
+            $this->plateRepository->filterByUser($queryBuilder, $user, $menuId ? (int)$menuId : null);
         }
         return $queryBuilder;
     }
